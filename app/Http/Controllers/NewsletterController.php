@@ -79,7 +79,7 @@ class NewsletterController extends Controller
                 ->where('list_name', $listName)
                 ->first();
 
-            if (!$subscription) {
+            if (! $subscription) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cette adresse email n\'est pas trouvée dans notre liste.',
@@ -117,7 +117,7 @@ class NewsletterController extends Controller
             ->where('list_name', $listName)
             ->first();
 
-        if (!$subscription) {
+        if (! $subscription) {
             return response()->json([
                 'success' => false,
                 'subscribed' => false,
