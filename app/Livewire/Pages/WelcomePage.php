@@ -12,6 +12,7 @@ use Spatie\Newsletter\Facades\Newsletter;
 class WelcomePage extends Component
 {
     public $email = '';
+
     public $list_name = 'subscribers';
 
     protected function rules()
@@ -52,6 +53,7 @@ class WelcomePage extends Component
 
             if ($existingSubscription && $existingSubscription->isSubscribed()) {
                 Toaster::error('Cette adresse email est déjà abonnée à notre newsletter.');
+
                 return;
             }
 
@@ -79,7 +81,7 @@ class WelcomePage extends Component
             Toaster::error('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
 
             if (config('app.debug')) {
-                logger()->error('Newsletter subscription error: ' . $e->getMessage());
+                logger()->error('Newsletter subscription error: '.$e->getMessage());
             }
         }
     }
