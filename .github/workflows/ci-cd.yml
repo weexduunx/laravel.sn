@@ -2,9 +2,14 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main, develop, staging, feature/setup-ci-pipeline ]
+    branches:
+      - main
+      - dev
+      - feature/*
   pull_request:
-    branches: [ main, develop, staging, feature/setup-ci-pipeline ]
+    branches:
+      - main
+      - dev
 
 jobs:
   test:
@@ -25,8 +30,11 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+    - name: Validate Composer files
+      run: composer validate --strict
+
     - name: Install Composer Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader
 
     - name: Generate Application Key
       run: php artisan key:generate
@@ -50,6 +58,12 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+
+    - name: Run Database Migrations
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+      run: php artisan migrate --force
 
     - name: Run Pest Tests
       env:
